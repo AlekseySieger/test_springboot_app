@@ -3,3 +3,7 @@ databaseChangeLog:
       file: db/changeSets/1-create-car.sql
   - include:
       file: db/changeSets/2-add-new-column.sql
+  - include:
+      file: db/changeSets/3-create-cat.sql
+  - include:
+      file: db/changeSets/4-add-column-cat.sql
