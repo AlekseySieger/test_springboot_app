@@ -7,3 +7,5 @@ databaseChangeLog:
       file: db/changeSets/3-create-cat.sql
   - include:
       file: db/changeSets/4-add-column-cat.sql
+  - include:
+      file: db/changeSets/5-create-garage-owner.sql

@@ -42,14 +42,9 @@ public class CarController {
         return carService.getActiveList();
     }
 
-    @PostMapping("/unavailable/{id}")
-    public void activeFalse(@PathVariable Long id) {
-        carService.setActiveFalse(id);
-    }
-
-    @PostMapping("/available/{id}")
-    public void activeTrue(@PathVariable Long id) {
-        carService.setActiveTrue(id);
+    @PostMapping("/active/{id}")
+    public void changeActive(@PathVariable Long id, @RequestBody Boolean active) {
+        carService.changeTypeOfActive(id, active);
     }
 
     @PutMapping("/update/{id}")

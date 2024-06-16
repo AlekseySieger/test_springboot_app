@@ -1,10 +1,10 @@
 package com.car_sales_company.car_app.dto;
 
+import com.car_sales_company.car_app.domain.Owner;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 
 @Data
 @Builder
@@ -29,5 +29,5 @@ public class CarDto {
 
     private String typeOfFuel;
 
-
+    private Long ownerId;
 }

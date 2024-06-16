@@ -1,26 +1,26 @@
 package com.car_sales_company.car_app.service;
 
 import com.car_sales_company.car_app.domain.Car;
+import com.car_sales_company.car_app.domain.Owner;
 import com.car_sales_company.car_app.dto.CarDto;
 import com.car_sales_company.car_app.repository.CarRepository;
+import com.car_sales_company.car_app.repository.OwnerRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-
-
 @Service
 public class CarService {
     private final CarRepository carRepository;
+    private final OwnerRepository ownerRepository;
 
-    public CarService(CarRepository carRepository) {
+    public CarService(CarRepository carRepository, OwnerRepository ownerRepository) {
         this.carRepository = carRepository;
+        this.ownerRepository = ownerRepository;
     }
 
     public void save(CarDto carDto) {
         Car car = carDtoToCar(carDto);
         carRepository.save(car);
     }
-
 
     public void delete(Long id) {
         carRepository.deleteById(id);
@@ -45,6 +45,7 @@ public class CarService {
         carDto.setFuelConsumption(car.getFuelConsumption());
         carDto.setMaxSpeed(car.getMaxSpeed());
         carDto.setTypeOfFuel(car.getTypeOfFuel());
+
         return carDto;
     }
 
@@ -55,29 +56,37 @@ public class CarService {
         car.setModel(carDto.getModel());
         car.setEnginePower(carDto.getEnginePower());
         car.setAcceleration(carDto.getAcceleration());
+        checkComplectation(carDto.getComplectation());
         car.setComplectation(carDto.getComplectation());
         car.setFuelConsumption(carDto.getFuelConsumption());
         car.setMaxSpeed(carDto.getMaxSpeed());
         car.setTypeOfFuel(carDto.getTypeOfFuel());
+
+        Owner owner = ownerRepository.findById(carDto.getOwnerId()).orElseThrow();
+        car.setOwner(owner);
         car.setActive(true);
         return car;
     }
 
+    private void checkComplectation(String complectation) {
+        if (carRepository.selectExists(complectation)) {
+            Car car = carRepository.findCarByComplectation(complectation);
+            if (car.getActive()) {
+                throw new RuntimeException("this car complectation is already exist");
+            } else {
+                delete(car.getId());
+            }
+        }
+    }
 
     public Car getById(Long id) {
         return carRepository.findById(id).orElseThrow();
     }
 
+    public void changeTypeOfActive(Long id, Boolean active) {
 
-    public void setActiveFalse(Long id) {
         Car car = getById(id);
-        car.setActive(false);
-        carRepository.save(car);
-    }
-
-    public void setActiveTrue(Long id) {
-        Car car = getById(id);
-        car.setActive(true);
+        car.setActive(active);
         carRepository.save(car);
     }
 
@@ -107,6 +116,10 @@ public class CarService {
         if (carDto.getTypeOfFuel() != null) {
             car.setTypeOfFuel(carDto.getTypeOfFuel());
         }
+        if (carDto.getOwnerId()!=null){
+            Owner owner = ownerRepository.findById(carDto.getOwnerId()).orElseThrow();
+            car.setOwner(owner);
+        }
 
         carRepository.save(car);
     }
@@ -114,5 +127,4 @@ public class CarService {
     public List<String> findUniqueColor() {
         return carRepository.findUniqueColor();
     }
-
 }

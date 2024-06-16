@@ -12,4 +12,13 @@ public interface CarRepository extends JpaRepository<Car, Long> {
     @Query(value = "select distinct  color from car;", nativeQuery = true)
     List<String> findUniqueColor();
 
+    Boolean existsByComplectation(String complectation);
+
+    @Query(value = "select exists (select * from car where car.complectation = :complectation);", nativeQuery = true)
+    Boolean selectExists(String complectation);
+
+    Car findByComplectation(String complectation);
+
+    @Query(value = "select * from car where car.complectation = :complectation;", nativeQuery = true)
+    Car findCarByComplectation(String complectation);
 }
