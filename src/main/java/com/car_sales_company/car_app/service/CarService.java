@@ -6,6 +6,8 @@ import com.car_sales_company.car_app.dto.CarDto;
 import com.car_sales_company.car_app.repository.CarRepository;
 import com.car_sales_company.car_app.repository.OwnerRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.LinkedList;
 import java.util.List;
 @Service
 public class CarService {
@@ -126,5 +128,9 @@ public class CarService {
 
     public List<String> findUniqueColor() {
         return carRepository.findUniqueColor();
+    }
+
+    public String getOwnerNameByCarId(Long carId){
+        return getById(carId).getOwner().getName();
     }
 }
