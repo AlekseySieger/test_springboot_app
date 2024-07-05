@@ -57,5 +57,9 @@ public class CarController {
         return carService.findUniqueColor();
     }
 
+    @GetMapping("/owner_name/{id}")
+    public String getOwnerNameByCarId(@PathVariable Long id){
+        return carService.getOwnerNameByCarId(id);
+    }
 }
 
